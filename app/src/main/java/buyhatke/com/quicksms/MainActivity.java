@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,9 +15,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
-    ListView lv;
+
+    RecyclerView rv;
+    SmsAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,34 +34,65 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        lv = (ListView) findViewById(R.id.messages_view);
+        rv = (RecyclerView) findViewById(R.id.messages_view);
+
+        LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
+        rv.setLayoutManager(llm);
+
+
+
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Cursor c;
 
-        Cursor c = getContentResolver().query(SmsApplication.INBOX_URI, null, null, null, null);
-        startManagingCursor(c);
+        ArrayList<CustomSms> smslist;
+
+        smslist = new ArrayList<>();
+
+        c = getContentResolver().query(SmsApplication.INBOX_URI, null, null, null, null);
+
 
         while (c.moveToNext()) {
-            for (int i = 0; i < c.getColumnCount(); i++) {
-                Log.d(c.getColumnName(i) + "", c.getString(i) + "");
-            }
+            String address = c.getString(c.getColumnIndexOrThrow("address"));
+            String date = c.getString(c.getColumnIndexOrThrow("date"));
+            String body = c.getString(c.getColumnIndexOrThrow("body"));
+
+            smslist.add(new CustomSms(address,date,body));
         }
 
-        ItemAdapter adapter = new ItemAdapter(MainActivity.this,c);
-        lv.setAdapter(adapter);
+       /*for(int i=smslist.size()-1;i>=0;i--)
+        {
+            String s = smslist.get(i).address;
+
+            for(int j=smslist.size()-1;j>=0;j--)
+            {
+                if(i!=j) {
+                    if (smslist.get(j).address.equals(s)) {
+                        smslist.remove(j);
+                    }
+                }
+            }
+        }*/
+
+        Map<String, CustomSms> map = new LinkedHashMap<>();
+
+        for (CustomSms ays : smslist) {
+            map.put(ays.address, ays);
+        }
+
+        smslist.clear();
+        smslist.addAll(map.values());
+
+        adapter = new SmsAdapter(MainActivity.this);
+        adapter.updateList(smslist);
+        rv.setAdapter(adapter);
+
     }
 
-    /*@Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        Intent intent = new Intent();
-        intent.setClass(this, ReadActivity.class);
-        intent.putExtra("id", String.valueOf(id));
-        startActivity(intent);
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
