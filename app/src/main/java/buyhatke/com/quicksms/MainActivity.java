@@ -1,5 +1,6 @@
 package buyhatke.com.quicksms;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView rv;
     SmsAdapter adapter;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
         rv.setLayoutManager(llm);
 
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i =new Intent(MainActivity.this,SendSms.class);
+                startActivity(i);
+            }
+        });
 
 
 
@@ -47,22 +57,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Cursor c;
 
-        ArrayList<CustomSms> smslist;
+        try {
+            Cursor c;
 
-        smslist = new ArrayList<>();
+            final ArrayList<CustomSms> smslist, smsgrouplist;
 
-        c = getContentResolver().query(SmsApplication.INBOX_URI, null, null, null, null);
+            smslist = new ArrayList<>();
+            smsgrouplist = new ArrayList<>();
+
+            c = getContentResolver().query(SmsApplication.INBOX_URI, null, null, null, null);
 
 
-        while (c.moveToNext()) {
-            String address = c.getString(c.getColumnIndexOrThrow("address"));
-            String date = c.getString(c.getColumnIndexOrThrow("date"));
-            String body = c.getString(c.getColumnIndexOrThrow("body"));
+            while (c.moveToNext()) {
+                String address = c.getString(c.getColumnIndexOrThrow("address"));
+                String date = c.getString(c.getColumnIndexOrThrow("date"));
+                String body = c.getString(c.getColumnIndexOrThrow("body"));
 
-            smslist.add(new CustomSms(address,date,body));
-        }
+                smslist.add(new CustomSms(address, date, body));
+            }
 
        /*for(int i=smslist.size()-1;i>=0;i--)
         {
@@ -78,18 +91,44 @@ public class MainActivity extends AppCompatActivity {
             }
         }*/
 
-        Map<String, CustomSms> map = new LinkedHashMap<>();
+            Map<String, CustomSms> map = new LinkedHashMap<>();
 
-        for (CustomSms ays : smslist) {
-            map.put(ays.address, ays);
+            for (CustomSms ays : smslist) {
+                map.put(ays.address, ays);
+            }
+
+            smsgrouplist.clear();
+            smsgrouplist.addAll(map.values());
+
+            adapter = new SmsAdapter(MainActivity.this);
+            adapter.updateList(smsgrouplist);
+            rv.setAdapter(adapter);
+
+            rv.addOnItemTouchListener(
+                    new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            // TODO Handle item click
+                            ArrayList<CustomSms> smsinsidegroup = new ArrayList<CustomSms>();
+
+                            String n = smsgrouplist.get(position).address;
+
+                            for (int i = 0; i < smslist.size(); i++) {
+                                if(smslist.get(i).address.equals(n))
+                                   smsinsidegroup.add(smslist.get(i));
+                            }
+
+                            Intent i = new Intent(MainActivity.this, ReadAllSms.class);
+                            i.putParcelableArrayListExtra("messages", smsinsidegroup);
+                            startActivity(i);
+                        }
+                    })
+            );
         }
-
-        smslist.clear();
-        smslist.addAll(map.values());
-
-        adapter = new SmsAdapter(MainActivity.this);
-        adapter.updateList(smslist);
-        rv.setAdapter(adapter);
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
     }
 
@@ -109,10 +148,12 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
             return true;
         }
-
+        if (id == R.id.action_share) {
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }
