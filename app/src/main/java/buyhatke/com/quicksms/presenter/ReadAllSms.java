@@ -1,17 +1,18 @@
-package buyhatke.com.quicksms;
+package buyhatke.com.quicksms.presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import buyhatke.com.quicksms.R;
+import buyhatke.com.quicksms.adapter.SmsAdapter;
+import buyhatke.com.quicksms.model.CustomSms;
 
 public class ReadAllSms extends AppCompatActivity {
 
@@ -43,4 +44,9 @@ public class ReadAllSms extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+        Toast.makeText(getApplicationContext(),"Use the up button to return",Toast.LENGTH_LONG).show();
+    }
 }

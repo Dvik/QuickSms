@@ -1,22 +1,20 @@
-package buyhatke.com.quicksms;
+package buyhatke.com.quicksms.presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.ArrayList;
+
+import buyhatke.com.quicksms.R;
+import buyhatke.com.quicksms.adapter.SmsAdapter;
+import buyhatke.com.quicksms.model.CustomSms;
 
 public class SearchActivity extends AppCompatActivity {
 

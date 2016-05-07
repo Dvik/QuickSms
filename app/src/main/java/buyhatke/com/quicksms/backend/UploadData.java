@@ -1,4 +1,4 @@
-package buyhatke.com.quicksms;
+package buyhatke.com.quicksms.backend;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -8,10 +8,7 @@ import android.content.IntentSender;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -38,6 +35,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import buyhatke.com.quicksms.R;
 
 public class UploadData extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {

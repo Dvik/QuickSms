@@ -1,8 +1,7 @@
-package buyhatke.com.quicksms;
+package buyhatke.com.quicksms.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.CursorAdapter;
 
 /**
  * Created by Divya on 5/6/2016.

@@ -1,4 +1,4 @@
-package buyhatke.com.quicksms;
+package buyhatke.com.quicksms.backend;
 
 import android.app.Application;
 import android.content.SharedPreferences;

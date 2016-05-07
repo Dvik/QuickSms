@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".presenter.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -28,7 +28,7 @@
         </activity>
 
         <receiver
-            android:name=".SmsReceiver"
+            android:name=".backend.SmsReceiver"
             android:exported="true">
             <intent-filter android:priority="999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
@@ -36,33 +36,33 @@
         </receiver>
 
         <activity
-            android:name=".ReadAllSms"
+            android:name=".presenter.ReadAllSms"
             android:label="@string/title_activity_read_all_sms"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".presenter.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="buyhatke.com.quicksms.MainActivity" />
+                android:value=".presenter.MainActivity" />
         </activity>
         <activity
-            android:name=".SendSms"
+            android:name=".presenter.SendSms"
             android:label="@string/title_activity_send_sms"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".presenter.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="buyhatke.com.quicksms.MainActivity" />
+                android:value=".presenter.MainActivity" />
         </activity>
         <activity
-            android:name=".SearchActivity"
+            android:name=".presenter.SearchActivity"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value="buyhatke.com.quicksms.MainActivity" />
+            android:value=".presenter.MainActivity" />
         </activity>
         <activity
-            android:name=".UploadData"
+            android:name=".backend.UploadData"
             android:label="@string/title_activity_upload_data"
             android:theme="@style/AppTheme.NoActionBar"/>
         <meta-data

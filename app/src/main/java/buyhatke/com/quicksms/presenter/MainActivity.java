@@ -1,4 +1,4 @@
-package buyhatke.com.quicksms;
+package buyhatke.com.quicksms.presenter;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -8,30 +8,28 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 import android.widget.Toast;
-
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.gcm.Task;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
+
+import buyhatke.com.quicksms.R;
+import buyhatke.com.quicksms.backend.RecyclerItemClickListener;
+import buyhatke.com.quicksms.adapter.SmsAdapter;
+import buyhatke.com.quicksms.backend.SmsApplication;
+import buyhatke.com.quicksms.backend.UploadData;
+import buyhatke.com.quicksms.model.CustomSms;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -56,6 +54,7 @@ public class MainActivity extends AppCompatActivity  {
         LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
         rv.setLayoutManager(llm);
 
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +71,7 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onResume() {
         super.onResume();
+
 
         try {
 
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity  {
             {
                 if(i!=j) {
                     if (smslist.get(j).address.equals(s)) {
-                        smslist.remove(j);
+
                     }
                 }
             }
@@ -110,11 +110,16 @@ public class MainActivity extends AppCompatActivity  {
             Map<String, CustomSms> map = new LinkedHashMap<>();
 
             for (CustomSms ays : smslist) {
-                map.put(ays.address, ays);
+
+                CustomSms existingValue = map.get(ays.address);
+                if(existingValue == null){
+                    map.put(ays.address, ays);
+                }
             }
 
             smsgrouplist.clear();
             smsgrouplist.addAll(map.values());
+
 
             adapter = new SmsAdapter(MainActivity.this);
             adapter.updateList(smsgrouplist);
@@ -145,6 +150,7 @@ public class MainActivity extends AppCompatActivity  {
         {
             e.printStackTrace();
         }
+
 
     }
 

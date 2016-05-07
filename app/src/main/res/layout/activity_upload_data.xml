@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#fda53a"
     android:gravity="center"
-    tools:context="buyhatke.com.quicksms.UploadData"
+    tools:context=".backend.UploadData"
     >
 
 

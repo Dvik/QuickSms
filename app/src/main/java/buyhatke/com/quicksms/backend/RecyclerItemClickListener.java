@@ -1,4 +1,4 @@
-package buyhatke.com.quicksms;
+package buyhatke.com.quicksms.backend;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

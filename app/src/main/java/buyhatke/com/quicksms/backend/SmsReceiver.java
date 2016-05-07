@@ -1,4 +1,4 @@
-package buyhatke.com.quicksms;
+package buyhatke.com.quicksms.backend;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -7,9 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
+
+import buyhatke.com.quicksms.R;
+import buyhatke.com.quicksms.presenter.MainActivity;
 
 /**
  * Created by Divya on 5/6/2016.
