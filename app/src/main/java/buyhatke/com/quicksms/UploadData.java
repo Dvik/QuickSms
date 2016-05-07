@@ -50,7 +50,7 @@ public class UploadData extends AppCompatActivity implements GoogleApiClient.Con
     public static String drive_id;
     public static DriveId driveID;
 
-    FrameLayout rl;//
+    FrameLayout rl;
     TextView success;
     ProgressBar progressBar;
 

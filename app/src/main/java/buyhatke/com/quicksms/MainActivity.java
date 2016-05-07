@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity  {
     FloatingActionButton fab;
     Cursor c;
     ExportTask task;
+    ArrayList<CustomSms> smslistSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity  {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        smslistSearch = new ArrayList<>();
         rv = (RecyclerView) findViewById(R.id.messages_view);
 
         LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity  {
             }
         }*/
 
+            smslistSearch = smslist;
             Map<String, CustomSms> map = new LinkedHashMap<>();
 
             for (CustomSms ays : smslist) {
@@ -237,6 +240,9 @@ public class MainActivity extends AppCompatActivity  {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
+            Intent i = new Intent(MainActivity.this,SearchActivity.class);
+            i.putParcelableArrayListExtra("search", smslistSearch);
+            startActivity(i);
             return true;
         }
         if (id == R.id.action_share) {
