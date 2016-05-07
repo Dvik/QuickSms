@@ -5,7 +5,7 @@
     android:padding="10dip" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,21 +15,21 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignBottom="@id/textView1"
+        android:layout_alignBottom="@id/address"
         android:text="Small Text"
         android:textColor="#555555"
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/textView1"
+        android:layout_below="@id/date"
         android:layout_marginTop="5dip"
         android:text="Small Text"
         android:textColor="#cccccc"

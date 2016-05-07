@@ -33,9 +33,9 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.ViewHolder> {
 
         public ViewHolder(RelativeLayout v) {
             super(v);
-            textView1= (TextView) v.findViewById(R.id.textView1);
-            textView2= (TextView) v.findViewById(R.id.textView2);
-            textView3= (TextView) v.findViewById(R.id.textView3);
+            textView1= (TextView) v.findViewById(R.id.address);
+            textView2= (TextView) v.findViewById(R.id.date);
+            textView3= (TextView) v.findViewById(R.id.body);
         }
     }
 

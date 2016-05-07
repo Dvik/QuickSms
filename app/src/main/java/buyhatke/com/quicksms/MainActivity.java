@@ -1,8 +1,12 @@
 package buyhatke.com.quicksms;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -15,19 +19,28 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.gcm.Task;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
 
     RecyclerView rv;
     SmsAdapter adapter;
     FloatingActionButton fab;
+    Cursor c;
+    ExportTask task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         try {
-            Cursor c;
+
 
             final ArrayList<CustomSms> smslist, smsgrouplist;
 
@@ -132,6 +145,81 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    class ExportTask extends AsyncTask<Void, Integer, Uri> {
+
+    ProgressDialog pDialog;
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        pDialog = new ProgressDialog(MainActivity.this);
+        pDialog.setMessage("Exporting to file ...");
+        pDialog.setIndeterminate(false);
+        pDialog.setMax(100);
+        pDialog.setProgress(0);
+        pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pDialog.setCancelable(false);
+        pDialog.show();
+    }
+
+    @Override
+    protected Uri doInBackground(Void... params) {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            FileOutputStream fos = null;
+            try {
+                File f = new File(Environment.getExternalStorageDirectory(), "QuickSmsBackUp.txt");
+                fos = new FileOutputStream(f);
+                int count = c.getCount(), i = 0;
+
+                StringBuilder sb = new StringBuilder();
+                if (c.moveToFirst()) {
+                    do {
+                        sb.append(c.getString(c.getColumnIndex("address")))
+                                .append("\n");
+                        sb.append(c.getString(c.getColumnIndex("body")))
+                                .append("\n");
+                        sb.append("\n");
+                        publishProgress(++i*100/count);
+                    } while (!isCancelled() && c.moveToNext());
+                }
+                fos.write(sb.toString().getBytes());
+                return Uri.fromFile(f);
+
+            } catch (Exception e) {
+            } finally {
+                if (fos != null) {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {}
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+        pDialog.setProgress(values[0]);
+    }
+
+    @Override
+    protected void onPostExecute(Uri result) {
+        super.onPostExecute(result);
+        pDialog.dismiss();
+
+        if (result == null) {
+            Toast.makeText(MainActivity.this, "Export task failed!",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Intent i = new Intent(MainActivity.this,UploadData.class);
+        startActivity(i);
+    }
+
+}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -152,8 +240,23 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_share) {
+            /*Intent i = new Intent(MainActivity.this,UploadData.class);
+            startActivity(i);*/
+
+            task = new ExportTask();
+            task.execute();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onPause() {
+        if (task != null) {
+            task.cancel(false);
+            task.pDialog.dismiss();
+        }
+        super.onPause();
+    }
+
 }

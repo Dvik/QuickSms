@@ -5,4 +5,5 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_send_sms">SendSms</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_upload_data">UploadData</string>
 </resources>
