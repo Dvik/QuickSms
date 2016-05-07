@@ -1,6 +1,6 @@
 # QuickSms
 
-Libraries used:
+Libraries used:  
 Appcombat library  
 Android Design Library  
 RecyclerView  
